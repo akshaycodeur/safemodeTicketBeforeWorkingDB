@@ -6,6 +6,7 @@ import ProjectSummary from "./ProjectSummary"; // Import the ProjectSummary comp
 import { Flex, Grid } from "@radix-ui/themes";
 import { Metadata } from "next";
 import GreetUser from "./Greeting";
+import TeamSmall from "./TeamSmall";
 
 export default async function Home() {
   // Fetch issue counts
@@ -49,7 +50,10 @@ export default async function Home() {
             pastDueProjects={pastDueProjects}
           />
         </Flex>
-        <LatestIssues />
+        <Flex direction="column" gap="5">
+          <LatestIssues />
+          <TeamSmall />
+        </Flex>
       </Grid>
     </>
   );
