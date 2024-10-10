@@ -160,7 +160,7 @@ const NavLinks = () => {
         </div>
 
         {/* Reports */}
-        <div className="mb-2">
+        <div className="mb-2 hidden">
           <Link
             href="/reports"
             className="flex items-center p-2 hover:bg-gray-800 rounded-md"
@@ -169,6 +169,7 @@ const NavLinks = () => {
             <span>Reports</span>
           </Link>
         </div>
+        <hr className="border-slate-800" />
         <div className="mb-2 flex items-center p-2 hover:bg-gray-800 rounded-md">
           <CircleUser className="mr-2 text-sky-500 w-5" />
           <span className="text-white">

@@ -25,7 +25,7 @@ const IssueDetailPage = async ({ params }: Props) => {
   if (!issue) notFound();
 
   return (
-    <div className="">
+    <div className="max-w-2xl mx-auto">
       <Grid columns={{ initial: "1", sm: "5" }} gap="5">
         <Box className="md:col-span-4">
           <IssueDetails issue={issue} />
