@@ -140,7 +140,7 @@ const NavLinks = () => {
         {/* Projects */}
         <div className="mb-2">
           <Link
-            href="/projects"
+            href="/projects/list"
             className="flex items-center p-2 hover:bg-gray-800 rounded-md"
           >
             <FilesIcon className="mr-2 text-sky-500 w-5" />

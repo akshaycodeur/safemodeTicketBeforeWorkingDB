@@ -6,26 +6,36 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
   relationMode = "prisma"
 }
 
 model Issue {
-  id               Int      @id @default(autoincrement())
-  title            String   @db.VarChar(255)
-  description      String   @db.Text
-  status           Status   @default(OPEN)
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
-  assignedToUserId String?  @db.VarChar(255)
-  assignedToUser   User?    @relation(fields: [assignedToUserId], references: [id])
+  id               Int       @id @default(autoincrement())
+  title            String    @db.VarChar(255)
+  description      String    @db.Text
+  status           Status    @default(OPEN)
+  priority         Priority  @default(MEDIUM) // Added priority field
+  dueDate          DateTime? @db.Date // Added dueDate field
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  assignedToUserId String?   @db.VarChar(255)
+  assignedToUser   User?     @relation(fields: [assignedToUserId], references: [id])
+  projectId        Int? // Added projectId for the relation
+  project          Project?  @relation("ProjectIssues", fields: [projectId], references: [id]) // Relation to Project
 }
 
 enum Status {
   OPEN
   IN_PROGRESS
   CLOSED
+}
+
+enum Priority {
+  HIGH
+  MEDIUM
+  LOW
 }
 
 model Account {
@@ -72,4 +82,14 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model Project {
+  id          Int       @id @default(autoincrement())
+  title       String    @db.VarChar(255)
+  description String    @db.Text
+  createdAt   DateTime  @default(now())
+  dueDate     DateTime? @db.Date
+  createdBy   String    @db.VarChar(255) // Could also link to User model if needed
+  issues      Issue[]   @relation("ProjectIssues") // Relation to Issue model
 }

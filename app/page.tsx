@@ -2,11 +2,13 @@ import prisma from "@/prisma/client";
 import IssueSummary from "./IssueSummary";
 import LatestIssues from "./LatestIssues";
 import IssueChart from "./IssueChart";
+import ProjectSummary from "./ProjectSummary"; // Import the ProjectSummary component
 import { Flex, Grid } from "@radix-ui/themes";
 import { Metadata } from "next";
 import GreetUser from "./Greeting";
 
 export default async function Home() {
+  // Fetch issue counts
   const open = await prisma.issue.count({
     where: { status: "OPEN" },
   });
@@ -17,6 +19,23 @@ export default async function Home() {
     where: { status: "CLOSED" },
   });
 
+  // Fetch project counts
+  const totalProjects = await prisma.project.count();
+  const upcomingProjects = await prisma.project.count({
+    where: {
+      dueDate: {
+        gte: new Date(), // Projects due today or in the future
+      },
+    },
+  });
+  const pastDueProjects = await prisma.project.count({
+    where: {
+      dueDate: {
+        lt: new Date(), // Projects that are past due
+      },
+    },
+  });
+
   return (
     <>
       <GreetUser />
@@ -24,6 +43,11 @@ export default async function Home() {
         <Flex direction="column" gap="5">
           <IssueSummary open={open} inProgress={inProgress} closed={closed} />
           <IssueChart open={open} inProgress={inProgress} closed={closed} />
+          <ProjectSummary
+            totalProjects={totalProjects}
+            upcomingProjects={upcomingProjects}
+            pastDueProjects={pastDueProjects}
+          />
         </Flex>
         <LatestIssues />
       </Grid>
