@@ -26,6 +26,7 @@ export async function POST(request: NextRequest) {
       title,
       description,
       priority,
+      status,
       dueDate,
       assignedToUserId,
       projectId,
@@ -62,7 +63,8 @@ export async function POST(request: NextRequest) {
       data: {
         title,
         description,
-        priority,
+        priority, // This assumes priority is either a string or enum in your Prisma model
+        status,
         dueDate: dueDate ? new Date(dueDate) : null, // Convert dueDate to Date object if provided
         assignedToUserId, // Add assigned user if provided
         projectId, // Link issue to project if provided

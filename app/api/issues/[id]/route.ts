@@ -18,8 +18,9 @@ export async function PATCH(
       status: 400,
     });
 
-  const { assignedToUserId, title, description } = body;
+  const { assignedToUserId, title, description, priority, dueDate } = body; // Include priority and dueDate
 
+  // Check if assignedToUserId is valid
   if (assignedToUserId) {
     const user = await prisma.user.findUnique({
       where: { id: assignedToUserId },
@@ -28,17 +29,21 @@ export async function PATCH(
       return NextResponse.json({ error: "Invalid user." }, { status: 400 });
   }
 
+  // Check if the issue exists
   const issue = await prisma.issue.findUnique({
     where: { id: parseInt(params.id) },
   });
   if (!issue)
     return NextResponse.json({ error: "Invalid issue" }, { status: 404 });
 
+  // Update the issue with title, description, assignedToUserId, priority, and dueDate
   const updatedIssue = await prisma.issue.update({
     where: { id: issue.id },
     data: {
       title,
       description,
+      priority, // Add priority to the update
+      dueDate: dueDate ? new Date(dueDate) : null, // Convert dueDate to Date, or set to null
       assignedToUserId,
     },
   });
